@@ -3,23 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostRequest;
-use App\Http\Resources\Collection\PostCollection;
-use App\Http\Resources\PostResource;
-use App\Models\Post;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Repositories\UserRepository;
+use App\Service\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class PostController extends Controller
+class UserController extends Controller
 {
-    protected $post;
+    protected $userService;
 
     /**
-     * @param Post $post
+     * @param UserService $userService
      */
-    public function __construct(Post $post)
-    {
-        $this->post = $post;
+    public function __construct(
+        UserService $userService
+    ) {
+        $this->userService = $userService;
     }
 
     /**
@@ -29,14 +31,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->post->paginate(5);
-
-        $postResource = PostResource::collection($posts);
-
+        $users = $this->userService->getAllUser();
         return $this->sentSuccessResponse(
-            $postResource,
+            $users,
             extraDataTransmission: [
-                'total' => $this->post->count()
+                'total' => $users->count()
             ],
             status: Response::HTTP_OK
         );
@@ -48,15 +47,12 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(UserRequest $request)
     {
-        $dataCreate = $request->all();
-        $post = $this->post->create($dataCreate);
-
-        $postResource = new PostResource($post);
+        $user = $this->userService->createUser($request->all());
 
         return $this->sentSuccessResponse(
-            $postResource,
+            $user,
             status: Response::HTTP_OK
         );
     }
@@ -69,12 +65,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->post->findOrFail($id);
-
-        $postResource = new PostResource($post);
+        $user = $this->userService->getUserById($id);
 
         return $this->sentSuccessResponse(
-            $postResource,
+            $user,
             status: Response::HTTP_OK
         );
     }
@@ -86,19 +80,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
-        $post = $this->post->findOrFail($id);
-
-        $dataUpdate = $request->all();
-
-        $post->update($dataUpdate);
-
-        $postResource = new PostResource($post);
+        $user = $this->userService->updateUserById($id, $request->all());
 
         return $this->sentSuccessResponse(
-            $postResource,
-            status: Response::HTTP_OK
+            $user,
+            message: $user ? 'success' : 'errors',
+            status: $user ? Response::HTTP_OK : Response::HTTP_NOT_FOUND,
         );
     }
 
@@ -110,15 +99,6 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = $this->post->findOrFail($id);
-
-        $post->delete();
-
-        return $this->sentSuccessResponse(
-            extraDataTransmission: [
-                'message' => 'successfully deleted '.$id
-            ],
-            status: Response::HTTP_OK
-        );
+        //
     }
 }

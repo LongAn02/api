@@ -13,19 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('discount_detail', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('price')->unsigned();
-            $table->foreignId('category_id')->constrained('categories')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedTinyInteger('discount_type_id');
             $table->foreignId('discount_id')->constrained('discounts')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('image');
-            $table->tinyInteger('status')->unsigned()->default(1);
+            $table->integer('detailID')->unsigned();
             $table->timestamps();
+
+            $table->foreign('discount_type_id')->references('id')->on('discount_type');
         });
     }
 
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('discount_detail');
     }
 };

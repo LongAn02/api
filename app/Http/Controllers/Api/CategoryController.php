@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostRequest;
-use App\Http\Resources\Collection\PostCollection;
-use App\Http\Resources\PostResource;
-use App\Models\Post;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class PostController extends Controller
+class CategoryController extends Controller
 {
-    protected $post;
+    protected $category;
 
     /**
-     * @param Post $post
+     * @param $category
      */
-    public function __construct(Post $post)
+    public function __construct(Category $category)
     {
-        $this->post = $post;
+        $this->category = $category;
     }
 
     /**
@@ -29,14 +28,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->post->paginate(5);
+        $category = $this->category->all();
 
-        $postResource = PostResource::collection($posts);
+        $categoryResource = CategoryResource::collection($category);
 
         return $this->sentSuccessResponse(
-            $postResource,
+            $categoryResource,
             extraDataTransmission: [
-                'total' => $this->post->count()
+                'total' => $this->category->count()
             ],
             status: Response::HTTP_OK
         );
@@ -48,15 +47,14 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(CategoryRequest $request)
     {
-        $dataCreate = $request->all();
-        $post = $this->post->create($dataCreate);
+        $categoryCreate = $this->category->create($request->all());
 
-        $postResource = new PostResource($post);
+        $categoryResource = new CategoryResource($categoryCreate);
 
         return $this->sentSuccessResponse(
-            $postResource,
+            $categoryResource,
             status: Response::HTTP_OK
         );
     }
@@ -69,12 +67,12 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->post->findOrFail($id);
+        $category = $this->category->findOrFail($id);
 
-        $postResource = new PostResource($post);
+        $categoryResource = new CategoryResource($category);
 
         return $this->sentSuccessResponse(
-            $postResource,
+            $categoryResource,
             status: Response::HTTP_OK
         );
     }
@@ -88,16 +86,14 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = $this->post->findOrFail($id);
+        $category = $this->category->findOrFail($id);
 
-        $dataUpdate = $request->all();
+        $category->update($request->all());
 
-        $post->update($dataUpdate);
-
-        $postResource = new PostResource($post);
+        $categoryResource = new CategoryResource($category);
 
         return $this->sentSuccessResponse(
-            $postResource,
+            $categoryResource,
             status: Response::HTTP_OK
         );
     }
@@ -110,13 +106,13 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = $this->post->findOrFail($id);
+        $category = $this->category->findOrFail($id);
 
-        $post->delete();
+        $category->delete();
 
         return $this->sentSuccessResponse(
             extraDataTransmission: [
-                'message' => 'successfully deleted '.$id
+                'act' => 'successfully deleted '.$id
             ],
             status: Response::HTTP_OK
         );

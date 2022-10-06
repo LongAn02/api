@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $primaryKey ='id';
+
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -20,11 +23,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
         'phone',
-        'address',
+        'password',
+        'sex',
         'age',
-        'sex'
+        'address',
     ];
 
     /**
@@ -35,6 +38,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -45,4 +50,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function discount_detail(){
+        return $this->belongsToMany(DiscountDetail::class, 'user_discountDetail', 'user_id', 'discountDetail_id');
+    }
 }

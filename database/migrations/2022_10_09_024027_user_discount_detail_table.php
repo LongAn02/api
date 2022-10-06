@@ -13,18 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('user_discountDetail', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('price')->unsigned();
-            $table->foreignId('category_id')->constrained('categories')
+            $table->foreignId('discountDetail_id')->constrained('discount_detail')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('discount_id')->constrained('discounts')
+            $table->foreignId('user_id')->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('image');
-            $table->tinyInteger('status')->unsigned()->default(1);
             $table->timestamps();
         });
     }
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('user_discountDetail');
     }
 };

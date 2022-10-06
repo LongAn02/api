@@ -1,0 +1,23 @@
+<- create User ->
+{
+    _name : string
+    _email : string
+    _password : string
+    _phone : string
+    _address : string
+    _age : tinyInteger
+    _sex : tinyInteger
+}
+
+
+<- update User ->
+{
+    _name : string
+    _email : string
+    _password : string
+    _phone : string
+    _address : string
+    _age : tinyInteger
+    _sex : tinyInteger
+    id : userId
+}
