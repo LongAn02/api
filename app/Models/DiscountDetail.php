@@ -26,4 +26,8 @@ class DiscountDetail extends Model
     public function users() {
         return $this->belongsToMany(User::class, 'user_discountDetail', 'discountDetail_id', 'user_id');
     }
+
+    public function discounts() {
+        return $this->belongsTo(Discount::class, 'discount_id', 'id');
+    }
 }

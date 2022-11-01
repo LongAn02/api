@@ -11,6 +11,10 @@ class UserRepository extends BaseRepository
         return User::class;
     }
 
+    public function getAllUser() {
+        return $this->getAll();
+    }
+
     public function getUser() {
         return $this->model->leftJoin('user_discountDetail', 'users.id', '=', 'user_discountDetail.user_id')
             ->leftJoin('discount_detail', 'discount_detail.id', '=', 'user_discountDetail.discountDetail_id')
@@ -30,7 +34,6 @@ class UserRepository extends BaseRepository
                 'discounts.percent_discount as discount_percent', 'categories.name as category_name',
                 'products.name as product_name', 'products.price as product_price')
             ->get();
-
     }
 
     public function storeUser($data) {

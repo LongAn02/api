@@ -29,23 +29,23 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            '_name' => 'bail|required',
-            '_email' => [
+            'name' => 'bail|required',
+            'email' => [
                 'bail',
                 'required',
                 'string',
                 'email',
                 Rule::unique('users' , 'email')->ignore(request('id'))
             ],
-            '_password' => 'bail|required',
-            '_phone' => [
+            'password' => 'bail|required',
+            'phone' => [
                 'bail',
                 'required',
                 Rule::unique('users' , 'phone')->ignore(request('id'))
             ],
-            '_address' => 'bail|required',
-            '_age' => 'bail|required|max:2|min:2',
-            '_sex' => 'bail|required',
+            'address' => 'bail|required',
+            'age' => 'bail|required|max:2|min:2',
+            'sex' => 'bail|required',
         ];
     }
 

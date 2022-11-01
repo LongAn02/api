@@ -1,23 +1,34 @@
 <- create User ->
 {
-    _name : string
-    _email : string
-    _password : string
-    _phone : string
-    _address : string
-    _age : tinyInteger
-    _sex : tinyInteger
+    name : string
+    email : string
+    password : string
+    phone : string
+    address : string
+    age : tinyInteger
+    sex : tinyInteger
 }
 
 
 <- update User ->
 {
-    _name : string
-    _email : string
-    _password : string
-    _phone : string
-    _address : string
-    _age : tinyInteger
-    _sex : tinyInteger
+    name : string
+    email : string
+    password : string
+    phone : string
+    address : string
+    age : tinyInteger
+    sex : tinyInteger
+    id : userId
+}
+
+
+<- show User ->
+{
+    id : userId
+}
+
+<- delete User ->
+{
     id : userId
 }

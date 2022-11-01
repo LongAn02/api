@@ -21,7 +21,7 @@ class ProductSeeder extends Seeder
                 $this->createProduct(
                     name: Str::random(5).'-'.$i,
                     price: rand(1000, 5000),
-                    image: 'product-'.$i.'.jng',
+                    image: 'product-'.$i.'.jpg',
                     category: rand(1, 3),
                     discount: rand(2, 20),
                 );
@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 $this->createProduct(
                     name: Str::random(5).'-'.$i,
                     price: rand(1000, 5000),
-                    image: 'product-'.$i.'.jng',
+                    image: 'product-'.$i.'.jpg',
                     category: rand(1, 3),
                     discount: 1
                 );

@@ -33,7 +33,7 @@ class UserService
     }
 
     public function getAllUser() {
-        return $this->userRepository->getUser();
+        return $this->userRepository->getAllUser();
     }
 
     public function getUserById($id) {

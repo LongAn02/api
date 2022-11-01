@@ -14,14 +14,17 @@ use Illuminate\Http\Response;
 class UserController extends Controller
 {
     protected $userService;
+    protected $user;
 
     /**
      * @param UserService $userService
      */
     public function __construct(
-        UserService $userService
+        UserService $userService,
+        User $user
     ) {
         $this->userService = $userService;
+        $this->user = $user;
     }
 
     /**
@@ -31,12 +34,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userService->getAllUser();
+        $users = $this->user->all();
+
+        $userResource = UserResource::collection($users);
+
         return $this->sentSuccessResponse(
-            $users,
-            extraDataTransmission: [
-                'total' => $users->count()
-            ],
+            $userResource,
             status: Response::HTTP_OK
         );
     }
@@ -49,10 +52,12 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $user = $this->userService->createUser($request->all());
+        $user = $this->user->create($request->all());
+
+        $userResource = new UserResource($user);
 
         return $this->sentSuccessResponse(
-            $user,
+            $userResource,
             status: Response::HTTP_OK
         );
     }
@@ -65,10 +70,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->userService->getUserById($id);
+        $user = $this->user->findOrFail($id);
+
+        $userResource = new UserResource($user);
 
         return $this->sentSuccessResponse(
-            $user,
+            $userResource,
             status: Response::HTTP_OK
         );
     }
@@ -82,12 +89,16 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $user = $this->userService->updateUserById($id, $request->all());
+        $user = $this->user->findOrFail($id);
+
+        $user->update($request->all());
+
+        $userResource = new UserResource($user);
 
         return $this->sentSuccessResponse(
-            $user,
-            message: $user ? 'success' : 'errors',
-            status: $user ? Response::HTTP_OK : Response::HTTP_NOT_FOUND,
+            $userResource,
+            message: $userResource ? 'success' : 'errors',
+            status: $userResource ? Response::HTTP_OK : Response::HTTP_NOT_FOUND,
         );
     }
 
@@ -99,6 +110,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = $this->user->findOrFail($id);
+
+        $user->delete();
+
+        return $this->sentSuccessResponse(
+            extraDataTransmission: [
+                'message' => 'successfully deleted '.$id
+            ],
+            status: Response::HTTP_OK
+        );
     }
 }
