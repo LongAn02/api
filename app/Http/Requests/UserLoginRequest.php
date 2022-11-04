@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class UserRequest extends FormRequest
+class UserLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,27 +27,12 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'bail|required',
-            'email' => [
-                'bail',
-                'required',
-                'string',
-                'email',
-                Rule::unique('users' , 'email')->ignore(request('id'))
-            ],
-            'password' => 'bail|required|confirmed',
-            'phone' => [
-                'bail',
-                'required',
-                Rule::unique('users' , 'phone')->ignore(request('id'))
-            ],
-            'address' => 'bail|required',
-            'age' => 'bail|required|max:2|min:2',
-            'sex' => 'bail|required',
+            'email' => 'bail|required|string|email',
+            'password' => 'bail|required'
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator)
     {
         $response = new Response([
             'errors' => $validator->errors()

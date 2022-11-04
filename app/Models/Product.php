@@ -29,4 +29,9 @@ class Product extends Model
     {
         return $this->belongsTo(Discount::class, 'discount_id', 'id');
     }
+
+    public function shoppingCart()
+    {
+        return $this->hasOne(ShoppingCart::class, 'product_id', 'id');
+    }
 }

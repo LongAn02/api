@@ -15,6 +15,4 @@ class Discount extends Model
         'name',
         'percent_discount'
     ];
-
-
 }

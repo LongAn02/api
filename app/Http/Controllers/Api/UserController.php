@@ -6,24 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Repositories\UserRepository;
-use App\Service\UserService;
-use Illuminate\Http\Request;
+use App\Service\ShoppingSessionService;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-    protected $userService;
+    protected $shoppingSessionService;
     protected $user;
 
     /**
-     * @param UserService $userService
+     * @param ShoppingSessionService $shoppingSessionService
+     * @param User $user
      */
     public function __construct(
-        UserService $userService,
+        ShoppingSessionService $shoppingSessionService,
         User $user
     ) {
-        $this->userService = $userService;
+        $this->shoppingSessionService = $shoppingSessionService;
         $this->user = $user;
     }
 
@@ -53,6 +52,8 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = $this->user->create($request->all());
+
+        $this->shoppingSessionService->storeShoppingSession($user->id);
 
         $userResource = new UserResource($user);
 

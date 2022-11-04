@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
              DiscountType::class,
              DiscountDetailSeeder::class,
              UserDiscountDetailSeeder::class,
-             TransportSeeder::class
+             TransportSeeder::class,
+             ShoppingsessionSeeder::class
          ]);
     }
 }
