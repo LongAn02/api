@@ -16,11 +16,9 @@ class ShoppingCartRepository extends BaseRepository
         return $this->store($data);
     }
 
-    public function updateQuantity($shopping_session_id, $product_id)
+    public function updateQuantity($where, $value)
     {
-        $arr = $this->whereProductId($shopping_session_id, $product_id);
-        $quantityProductInCart = $arr->first()->quantity;
-        return $this->update($arr->first()->id, ['quantity' => $quantityProductInCart + 1]);
+        return $this->update($where, $value);
     }
 
     public function whereProductId($shopping_session_id, $product_id)
@@ -28,4 +26,17 @@ class ShoppingCartRepository extends BaseRepository
         return $this->model->where('shopping_session_id', $shopping_session_id)
             ->where('product_id', $product_id)->get();
     }
+
+    public function getShoppingCartByUser($shoppingSessionId)
+    {
+        return $this->model->where('shopping_session_id', $shoppingSessionId)->get();
+    }
+
+    public function deleteProductByProductId($shoppingSessionId, $productId)
+    {
+        return $this->model->where('shopping_session_id', $shoppingSessionId)
+            ->where('product_id', $productId)
+            ->delete();
+    }
+
 }

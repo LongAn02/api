@@ -16,11 +16,9 @@ class ShoppingSessionRepository extends BaseRepository
         $this->store($data);
     }
 
-    public function updateTotal($shoppingSessionId)
+    public function updateTotal($where, array $value)
     {
-        $shoppingSession = $this->getTotalOnShoppingSession($shoppingSessionId);
-        $total = $shoppingSession->first()->total;
-        $this->update($shoppingSession->first()->id,['total' => $total + 1]);
+        return $this->update($where, $value);
     }
 
     public function getTotalOnShoppingSession($shoppingSessionId)

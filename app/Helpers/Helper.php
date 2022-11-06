@@ -1,7 +1,12 @@
 <?php
-if (!function_exists('sum')) {
-    function sum($a, $b)
+
+if (!function_exists('shopping_session_by_user')) {
+
+    /**
+     * @return mixed
+     */
+    function shopping_session_by_user()
     {
-        return $a + $b;
+        return auth()->user()->shoppingSession->id;
     }
 }

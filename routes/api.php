@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ShoppingCartController;
 use App\Http\Controllers\Api\ShoppingSession;
 
 use App\Http\Controllers\Auth\AuthController;
@@ -26,7 +26,12 @@ Route::post('auth/register', [AuthController::class, 'register']);
 Route::post('auth/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function (){
-    Route::post('/shoppingCart', [\App\Http\Controllers\Api\ShoppingCartController::class, 'stoclearre']);
+    Route::group(['prefix' => '/shoppingCart'], function () {
+        Route::get('/', [ShoppingCartController::class,'index']);
+        Route::post('/', [ShoppingCartController::class,'store']);
+        Route::put('/{product_id}', [ShoppingCartController::class,'update']);
+        Route::delete('/{product_id}', [ShoppingCartController::class,'destroy']);
+    });
 });
 
 
